@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= yield :title %></title>
+  <%= stylesheet_link_tag "bootstrap", "users" %>
+  <%= javascript_include_tag "users" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+	<div class="container">
+		<div class="masthead">
+			<%= yield :header %>
+		</div>
+		<div class="row">
+			<%= yield :registration %>
+			<%= yield :login %>
+			<%= yield :content %>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<% content_for :title do %>
+	The Wall
+<% end %>
+
+<% content_for :header do %>
+	<h4>The Wall</h4>
+	<div id="user">
+		<p>Welcome <%= @user['first_name'] %>!</p>
+		<%= button_to "Sign Off", logout_url,
+			method: :delete,
+			class: 'btn btn-xs btn-danger' %>
+	</div>
+<% end %>
+
+<% content_for :content do%>
+	<div id="content" class="col-md-10">
+		<h4>Post a message</h4>
+		<%= simple_form_for @message, url: messages_path, html: {class: 'form'} do |f| %>
+			<%= f.input :description, as: :text, label: false %>
+			<%= f.submit "Post a message", class: 'btn btn-xs btn-primary' %>
+		<% end %>
+
+		<% @messages.each do |message| %>
+			<% user = @users.find(message.user_id) %>
+			<h5><%= user.first_name + " " + user.last_name %> - <%= message.created_at.strftime('%B %d, %Y') %></h5>
+			<p><%= message.description %></p>
+
+			<div class="comments">
+				<% message.comments.all.each do |comment| %>
+					<% user = comment.user %>
+					<h5><%=user.first_name + " " + user.last_name %> - <%= comment.created_at.strftime('%B %d, %Y') %></h5>
+					<p><%= comment.content %></p>
+				<% end %>
+
+				<h6>Post a comment</h6>
+				<%= simple_form_for @comment, url: comments_path, html: {class: 'form'} do |f| %>
+					<%= f.input :message_id, as: :hidden, input_html: { value: message.id } %>
+					<%= f.input :content, as: :text, label: false %>
+					<%= f.submit "Post a comment", class: 'btn btn-xs btn-success' %>
+				<% end %>
+			</div>
+		<% end %>
+	</div>
+<% end %>
